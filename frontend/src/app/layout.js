@@ -3,8 +3,8 @@ import './globals.css'
 export const metadata = {
   title: 'ClinIQ AI — Multimodal Medical Report Intelligence',
   description:
-    'AI-powered analysis for CBC, Thyroid, and Chest X-ray reports using Multimodal RAG, BioBERT, and Groq Llama 3.',
-  keywords: 'medical AI, CBC analysis, thyroid report, chest x-ray, RAG, multimodal',
+    'AI-powered analysis for CBC, Thyroid, and Chest X-ray medical reports.',
+  keywords: 'medical AI, CBC analysis, thyroid report, chest x-ray, clinical intelligence',
   icons: {
     icon: '/favicon.ico',
   },

@@ -78,13 +78,13 @@ function getRiskMeta(risk = '') {
 }
 
 /* 
-   RAG MODALITY META
+   MODALITY META
  */
 function getModalityMeta(mode = '') {
   const m = (mode || '').toLowerCase()
-  if (m === 'hybrid') return { label:'Hybrid',    color:'#7c3aed', bg:'#ede9fe', icon:'',  desc:'BioBERT + ResNet50' }
-  if (m === 'image')  return { label:'Image',     color:'#0891b2', bg:'#cffafe', icon:'',  desc:'ResNet50 (2048-dim)' }
-  return                     { label:'Text',      color:'#0284c7', bg:'#e0f2fe', icon:'',  desc:'BioBERT (768-dim)' }
+  if (m === 'hybrid') return { label:'Hybrid',    color:'#7c3aed', bg:'#ede9fe', icon:'',  desc:'Hybrid' }
+  if (m === 'image')  return { label:'Image',     color:'#0891b2', bg:'#cffafe', icon:'',  desc:'Image' }
+  return                     { label:'Text',      color:'#0284c7', bg:'#e0f2fe', icon:'',  desc:'Text' }
 }
 
 /* 
@@ -100,7 +100,7 @@ const IconChevron = ({ open }) => <svg className={`w-4 h-4 transition-transform 
 const IconArrow   = () => <svg className="w-3 h-3 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7"/></svg>
 
 /* 
-   RAG PIPELINE STRIP  — shows the retrieval flow for this query
+   PIPELINE STRIP  — shows the retrieval flow for this query
  */
 function RAGPipelineStrip({ searchMode, searchModel, caseCount, ragActive = true }) {
   const modMeta = getModalityMeta(searchMode)
@@ -109,16 +109,16 @@ function RAGPipelineStrip({ searchMode, searchModel, caseCount, ragActive = true
 
   const steps = [
     { icon: searchMode === 'image' ? '' : searchMode === 'hybrid' ? '' : '', label: 'Input' },
-    { icon: '', label: searchMode === 'hybrid' ? 'BioBERT + ResNet50' : searchModel || 'BioBERT' },
-    { icon: '', label: 'Milvus' },
+    { icon: '', label: searchMode === 'hybrid' ? 'Hybrid' : 'AI Analysis' },
+    
     { icon: '', label: `${caseCount} cases` },
-    { icon: '', label: 'Groq LLM' },
+    { icon: '', label: 'AI Analysis' },
   ]
 
   return (
     <div className="glass-card px-4 py-3 animate-slide-up">
       <div className="flex items-center justify-between mb-2">
-        <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Multimodal RAG Pipeline</span>
+        <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Analysis Pipeline</span>
         <span className="text-xs font-bold px-2 py-0.5 rounded-full"
               style={{ background: modMeta.bg, color: modMeta.color }}>
           {modMeta.icon} {modMeta.label} retrieval
@@ -229,7 +229,7 @@ function SimilarCases({ cases = [], searchMode = 'text' }) {
             {cases.length}
           </span>
           Retrieved Cases
-          <span className="text-xs font-normal text-slate-400">— from Milvus vector DB</span>
+          <span className="text-xs font-normal text-slate-400"></span>
         </span>
         <IconChevron open={open}/>
       </button>
@@ -294,7 +294,7 @@ function SimilarCases({ cases = [], searchMode = 'text' }) {
           })}
 
           <p className="text-xs text-center text-slate-400 pt-1">
-            Retrieved via {getModalityMeta(searchMode).desc} → Milvus cosine similarity
+            Similar cases retrieved
           </p>
         </div>
       )}
@@ -319,16 +319,16 @@ function ResultPanel({ result, loading }) {
         </div>
       </div>
       <div className="text-center">
-        <p className="font-semibold text-slate-700">Multimodal RAG in progress…</p>
-        <p className="text-sm text-slate-400 mt-1">BioBERT / ResNet50 → Milvus → Groq Llama 3</p>
+        <p className="font-semibold text-slate-700">Analysis in progress…</p>
+        <p className="text-sm text-slate-400 mt-1">AI is analysing your report…</p>
       </div>
       <div className="w-56 space-y-2">
         {[
           'Parsing report',
-          'Generating embeddings',
-          'Searching Milvus vector DB',
+          'Processing report',
+          'Running analysis',
           'Retrieving similar cases',
-          'RAG-augmented generation',
+          'Generating result',
         ].map((s, i) => (
           <div key={i} className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-cyan-300 animate-pulse"
@@ -404,7 +404,7 @@ function ResultPanel({ result, loading }) {
         </button>
       </div>
 
-      {/*  RAG Pipeline Strip — only show when RAG is active  */}
+      {/*  Pipeline Strip — only show when RAG is active  */}
       {result.rag_active !== false && (
         <RAGPipelineStrip
           searchMode={searchMode}
@@ -438,7 +438,7 @@ function ResultPanel({ result, loading }) {
         </div>
       )}
 
-      {/*  RAG-Augmented AI Analysis  */}
+      {/*  AI-Enhanced AI Analysis  */}
       {result.groq_analysis && (
         <div className="glass-card p-5 animate-slide-up" style={{ animationDelay:'0.2s' }}>
           <div className="flex items-start justify-between gap-2 mb-3">
@@ -447,10 +447,10 @@ function ResultPanel({ result, loading }) {
               <h3 className="text-sm font-semibold text-slate-600 uppercase tracking-wider">AI Analysis</h3>
             </div>
             <div className="flex items-center gap-1.5 shrink-0 flex-wrap justify-end">
-              {/* RAG-Augmented badge */}
+              {/* AI-Enhanced badge */}
               <span className="text-[10px] font-bold px-2 py-0.5 rounded-full border"
                     style={{ background:'#d9f8fd', color:'#0e7490', borderColor:'#a5f3fc' }}>
-                 RAG-Augmented
+                 AI-Enhanced
               </span>
               {/* Modality badge */}
               <span className="text-[10px] font-bold px-2 py-0.5 rounded-full border"
@@ -472,8 +472,7 @@ function ResultPanel({ result, loading }) {
                  style={{ background:'#f0fdfe', border:'1px solid #a5f3fc' }}>
               <span></span>
               <span>
-                Analysis conditioned on <strong>{caseCount} retrieved cases</strong> from Milvus —
-                {' '}{getModalityMeta(searchMode).desc} cosine similarity
+                Analysis based on <strong>{caseCount} similar cases</strong>
               </span>
             </div>
           )}
@@ -542,7 +541,7 @@ function Header({ view, setView, health, user, onLogin, onLogout, onCamera }) {
           ))}
         </nav>
 
-        {/* RAG status */}
+        {/* status */}
         <div className="hidden sm:flex items-center gap-1.5">
           <div className={`w-2 h-2 rounded-full ${
             health === null ? 'bg-slate-300 animate-pulse'
@@ -594,7 +593,7 @@ function HeroSection({ onStart, onDigest }) {
       <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-6 animate-fade-in"
            style={{ background:'#d9f8fd', color:'#0e7490', border:'1px solid #a5f3fc' }}>
         <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse"/>
-        Multimodal RAG · BioBERT + ResNet50 · Milvus · Groq Llama 3
+        AI-Powered Medical Analysis
       </div>
 
       {/* Heading */}
@@ -606,7 +605,7 @@ function HeroSection({ onStart, onDigest }) {
         </span>
       </h1>
       <p className="text-base sm:text-lg text-slate-500 max-w-xl mx-auto mb-10 animate-fade-in">
-        Upload CBC, Thyroid, or Chest X-ray reports — instant multimodal RAG analysis with Milvus vector search and Groq LLM.
+        Upload CBC, Thyroid, or Chest X-ray reports for instant AI-powered analysis.
       </p>
       <div className="flex flex-col sm:flex-row items-center justify-center gap-3 animate-slide-up">
         <button onClick={onStart} className="btn-primary text-lg px-8 py-4">
@@ -622,10 +621,10 @@ function HeroSection({ onStart, onDigest }) {
       {/* Feature cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto mt-16">
         {[
-          { icon:'', title:'CBC Analysis',   sub:'BioBERT text retrieval' },
+          { icon:'', title:'CBC Analysis',   sub:'AI-powered analysis' },
           { icon:'', title:'Thyroid Panel',  sub:'Semantic similarity' },
-          { icon:'', title:'Chest X-ray',    sub:'ResNet50 image search' },
-          { icon:'', title:'Hybrid RAG',     sub:'Text + Image fusion' },
+          { icon:'', title:'Chest X-ray',    sub:'Image recognition' },
+          { icon:'', title:'Combined',     sub:'Combined analysis' },
         ].map(f => (
           <div key={f.title}
                className="glass-card p-4 text-center hover:shadow-lg transition-shadow cursor-pointer group"
@@ -637,16 +636,16 @@ function HeroSection({ onStart, onDigest }) {
         ))}
       </div>
 
-      {/* RAG pipeline diagram */}
+      {/* pipeline diagram */}
       <div className="glass-card max-w-2xl mx-auto mt-12 px-6 py-4">
-        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">RAG Architecture</p>
+        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">How It Works</p>
         <div className="flex items-center justify-center gap-2 flex-wrap text-sm">
           {[
             ['','Input'],
-            ['','BioBERT\n+ResNet50'],
-            ['','Milvus\nVector DB'],
+            ['','AI\nModels'],
+            ['','Knowledge\nBase'],
             ['','Top-k\nCases'],
-            ['','Groq\nLlama 3'],
+            ['','AI\nAnalysis'],
             ['','Report'],
           ].map(([icon, label], i, arr) => (
             <div key={i} className="flex items-center gap-2">
@@ -666,7 +665,7 @@ function HeroSection({ onStart, onDigest }) {
 
       {/* Tech tags */}
       <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-        {['FastAPI','Next.js','BioBERT (768-dim)','ResNet50 (2048-dim)','Milvus / Zilliz Cloud','Groq Llama 3.3-70B'].map(t => (
+        {['FastAPI','Next.js','AI Engine','Supabase','Python 3.11'].map(t => (
           <span key={t} className="text-xs font-medium text-slate-400 border border-slate-200 rounded-full px-3 py-1">{t}</span>
         ))}
       </div>
@@ -767,16 +766,16 @@ function AnalyseSection() {
             ))}
           </div>
 
-          {/* RAG path hint */}
+          {/* path hint */}
           {inputMode !== 'sample' && (
             <div className="flex items-center gap-2 text-xs text-slate-400 px-1">
-              <span>RAG path:</span>
+              <span>Analysis:</span>
               {inputMode === 'upload' && file && isImageFile(file)
                 ? <span className="font-semibold" style={{color:'#0891b2'}}>
-                     ResNet50 image → Milvus{clinCtx ? ' + BioBERT hybrid' : ''}
+                     Image + context analysis
                   </span>
                 : <span className="font-semibold" style={{color:'#22d3ee'}}>
-                     BioBERT text → Milvus
+                     Text analysis
                   </span>
               }
             </div>
@@ -831,7 +830,7 @@ function AnalyseSection() {
                     <p className="font-semibold text-slate-600 text-sm">Drop file here or click to browse</p>
                     <p className="text-xs text-slate-400 mt-1">PDF · DOCX · TXT · PNG · JPG</p>
                     <p className="text-xs mt-2 font-medium" style={{color:'#0891b2'}}>
-                      Images → ResNet50 embedding &nbsp;|&nbsp; Docs → BioBERT embedding
+                      Images and documents supported
                     </p>
                   </div>
                   <input ref={fileRef} type="file" accept=".pdf,.docx,.txt,.png,.jpg,.jpeg"
@@ -854,8 +853,8 @@ function AnalyseSection() {
                        style={{ background: isImageFile(file) ? '#cffafe' : '#e0f2fe',
                                 color:      isImageFile(file) ? '#0e7490' : '#0284c7' }}>
                     {isImageFile(file)
-                      ? <> ResNet50 image embedding → Milvus cosine search{clinCtx ? ' + BioBERT hybrid' : ''}</>
-                      : <> BioBERT text embedding → Milvus cosine search</>
+                      ? <>Image analysis with AI</>
+                      : <>Text analysis with AI</>
                     }
                   </div>
 
@@ -870,7 +869,7 @@ function AnalyseSection() {
                     <div className="mt-3">
                       <label className="text-xs font-semibold text-slate-500 block mb-1">
                         Clinical Context
-                        <span className="font-normal text-slate-400"> — enables hybrid RAG (text + image)</span>
+                        
                       </label>
                       <textarea
                         value={clinCtx} onChange={e => setClinCtx(e.target.value)}
@@ -929,7 +928,7 @@ function Footer({ onDigest }) {
             style={{borderColor:'#22d3ee', color:'#0e7490', background:'#d9f8fd'}}>
              Daily Digest
           </button>
-          {['FastAPI','Next.js','Milvus','Groq'].map(t => (
+          {['FastAPI','Next.js','AI Engine','Supabase'].map(t => (
             <span key={t} className="text-xs text-slate-400">{t}</span>
           ))}
         </div>
