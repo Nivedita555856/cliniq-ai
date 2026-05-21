@@ -1,0 +1,37 @@
+CBC REPORT
+
+Patient: Robert Johnson, 72 years, Male
+Date: 2024-03-20
+
+CLINICAL CONTEXT: Patient presents with severe fatigue, shortness of breath on minimal exertion, pale skin, dizziness, and palpitations. History of gastrointestinal bleeding 6 months ago. No recent blood transfusion.
+
+LABORATORY RESULTS:
+- Hemoglobin: 6.5 g/dL (Reference: 13.5-17.5) → CRITICALLY LOW
+- RBC: 2.1 M/mcL (Reference: 4.5-5.9) → CRITICALLY LOW
+- WBC: 5.2 x10^3/uL (Reference: 4.5-11.0) → NORMAL
+- Platelets: 180 x10^3/uL (Reference: 150-450) → NORMAL
+- Hematocrit: 19% (Reference: 40-52%) → CRITICALLY LOW
+- MCV: 72 fL (Reference: 80-100) → LOW
+- MCH: 23 pg (Reference: 27-34) → LOW
+- MCHC: 31 g/dL (Reference: 32-36) → LOW
+- RDW: 18.5% (Reference: 11.5-14.5) → HIGH
+- Reticulocyte count: 0.5% (Reference: 0.5-2.5%) → LOW
+- Neutrophils: 58% (Reference: 40-60%) → NORMAL
+- Lymphocytes: 32% (Reference: 20-40%) → NORMAL
+- Monocytes: 7% (Reference: 2-10%) → NORMAL
+- Eosinophils: 2% (Reference: 0-6%) → NORMAL
+- Basophils: 1% (Reference: 0-2%) → NORMAL
+
+ADDITIONAL FINDINGS:
+- Peripheral blood smear: Microcytic hypochromic RBCs, target cells, elliptocytes
+- Ferritin: 8 ng/mL (Reference: 30-300) → CRITICALLY LOW
+- Iron: 20 mcg/dL (Reference: 50-150) → LOW
+- TIBC: 450 mcg/dL (Reference: 250-400) → HIGH
+
+WARNING SIGNS TO MONITOR:
+- Chest pain
+- Shortness of breath worsening
+- Syncope/dizziness
+- Tachycardia >100 bpm
+- Hypotension
+

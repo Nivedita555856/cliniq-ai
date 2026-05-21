@@ -1,0 +1,22 @@
+CBC REPORT 
+Patient: David Miller, 45 years, Male
+Date: 2024-03-20
+
+CLINICAL CONTEXT: Patient presents with fatigue, low energy, and mild fever (99.8°F) for 3 days. No significant past medical history.
+
+LABORATORY RESULTS:
+- Hemoglobin: 11.2 g/dL (Reference: 13.5-17.5) → LOW
+- RBC: 3.9 M/mcL (Reference: 4.5-5.9) → LOW
+- WBC: 12.8 x10^3/uL (Reference: 4.5-11.0) → HIGH
+- Platelets: 320 x10^3/uL (Reference: 150-450) → NORMAL
+- Hematocrit: 34% (Reference: 40-52%) → LOW
+- MCV: 78 fL (Reference: 80-100) → LOW
+- MCH: 25 pg (Reference: 27-34) → LOW
+- MCHC: 32 g/dL (Reference: 32-36) → NORMAL
+- RDW: 15.5% (Reference: 11.5-14.5) → HIGH
+- Neutrophils: 75% (Reference: 40-60%) → HIGH
+- Lymphocytes: 18% (Reference: 20-40%) → LOW
+- Monocytes: 6% (Reference: 2-10%) → NORMAL
+- Eosinophils: 1% (Reference: 0-6%) → NORMAL
+- Basophils: 0.5% (Reference: 0-2%) → NORMAL
+

@@ -1,0 +1,57 @@
+# ClinIQ AI — Render Deployment Config
+# Deploy: https://render.com → New → Web Service → connect your GitHub repo
+
+services:
+  - type: web
+    name: cliniq-backend
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    plan: starter   # 512 MB RAM — enough for CPU-only torch + Groq
+
+    envVars:
+      # Server
+      - key: PORT
+        value: "8000"
+
+      # Groq LLM (REQUIRED — paste your key in Render dashboard)
+      - key: GROQ_API_KEY
+        sync: false
+
+      # Zilliz Cloud (Managed Milvus — free tier at cloud.zilliz.com)
+      - key: ZILLIZ_CLOUD_URI
+        sync: false
+      - key: ZILLIZ_CLOUD_TOKEN
+        sync: false
+
+      # Supabase
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+
+      # Twilio SMS
+      - key: TWILIO_ACCOUNT_SID
+        sync: false
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+      - key: TWILIO_FROM_NUMBER
+        sync: false
+
+      # Daily Digest Email (SMTP)
+      - key: SMTP_HOST
+        value: "smtp.gmail.com"
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
+
+      # CORS — replace with your Vercel URL after deploying frontend
+      - key: ALLOWED_ORIGINS
+        value: "*"
+
+      # Optional OpenAI fallback
+      - key: OPENAI_API_KEY
+        sync: false

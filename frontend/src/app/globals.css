@@ -1,0 +1,229 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── CSS Variables ──────────────────────────────────────────────────────────── */
+:root {
+  --cyan-primary: #22d3ee;
+  --cyan-light:   #d9f8fd;
+  --cyan-dark:    #0e7490;
+  --cyan-glow:    rgba(34, 211, 238, 0.25);
+  --risk-high:    #ef4444;
+  --risk-moderate: #f59e0b;
+  --risk-low:     #22c55e;
+  --bg-main:      #f0fdfe;
+  --bg-card:      #ffffff;
+  --text-primary: #0f172a;
+  --text-muted:   #64748b;
+  --border:       #e2e8f0;
+}
+
+/* ── Base ───────────────────────────────────────────────────────────────────── */
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0; padding: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg-main);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Scrollbar ──────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #c7f3fc; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--cyan-primary); }
+
+/* ── Animations ─────────────────────────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-ring {
+  0%   { transform: scale(0.95); box-shadow: 0 0 0 0 var(--cyan-glow); }
+  70%  { transform: scale(1);    box-shadow: 0 0 0 12px transparent; }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 transparent; }
+}
+
+@keyframes scan-line {
+  0%   { top: 0%; opacity: 1; }
+  45%  { opacity: 1; }
+  50%  { top: 100%; opacity: 0; }
+  51%  { top: 0%; opacity: 0; }
+  55%  { opacity: 1; }
+  100% { top: 100%; opacity: 1; }
+}
+
+@keyframes spin-arc {
+  from { stroke-dashoffset: 251; }
+  to   { stroke-dashoffset: 0; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+@keyframes ecg {
+  0%   { stroke-dashoffset: 1000; }
+  100% { stroke-dashoffset: 0; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+/* ── Utility Classes ────────────────────────────────────────────────────────── */
+.animate-fade-in  { animation: fadeIn  0.5s ease-in-out; }
+.animate-slide-up { animation: slideUp 0.4s ease-out; }
+.animate-pulse-ring { animation: pulse-ring 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite; }
+.animate-blink    { animation: blink 1.4s ease-in-out infinite; }
+
+/* ── Glass card ─────────────────────────────────────────────────────────────── */
+.glass-card {
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(34, 211, 238, 0.15);
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(14,116,144,0.08);
+}
+
+/* ── Skeleton shimmer ───────────────────────────────────────────────────────── */
+.skeleton {
+  background: linear-gradient(90deg, #e2f8fb 25%, #b2f0fa 50%, #e2f8fb 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s infinite;
+  border-radius: 8px;
+}
+
+/* ── Risk badge ─────────────────────────────────────────────────────────────── */
+.risk-badge-high     { background:#fee2e2; color:#b91c1c; border:1.5px solid #fca5a5; }
+.risk-badge-moderate { background:#fef3c7; color:#92400e; border:1.5px solid #fde68a; }
+.risk-badge-low      { background:#dcfce7; color:#166534; border:1.5px solid #86efac; }
+.risk-badge-unknown  { background:#f1f5f9; color:#475569; border:1.5px solid #cbd5e1; }
+
+/* ── Upload drop zone ───────────────────────────────────────────────────────── */
+.drop-zone {
+  border: 2px dashed #a5f3fc;
+  background: #f0fdfe;
+  transition: all 0.2s ease;
+}
+.drop-zone:hover, .drop-zone.dragging {
+  border-color: var(--cyan-primary);
+  background: var(--cyan-light);
+  box-shadow: 0 0 0 4px rgba(34,211,238,0.12);
+}
+
+/* ── ECG animation (decorative) ─────────────────────────────────────────────── */
+.ecg-line {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: ecg 3s linear infinite;
+}
+
+/* ── Scan overlay ───────────────────────────────────────────────────────────── */
+.scan-overlay {
+  position: absolute;
+  left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--cyan-primary), transparent);
+  animation: scan-line 2.5s ease-in-out infinite;
+}
+
+/* ── Progress bar ───────────────────────────────────────────────────────────── */
+.progress-bar {
+  height: 6px;
+  border-radius: 9999px;
+  background: #e0f7fa;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 0.4s ease;
+}
+
+/* ── Tabs ────────────────────────────────────────────────────────────────────── */
+.tab-btn {
+  padding: 0.5rem 1.25rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+.tab-btn.active {
+  background: var(--cyan-primary);
+  color: white;
+  box-shadow: 0 2px 8px rgba(34,211,238,0.4);
+}
+.tab-btn:not(.active) {
+  background: transparent;
+  color: var(--text-muted);
+}
+.tab-btn:not(.active):hover {
+  background: var(--cyan-light);
+  color: var(--cyan-dark);
+}
+
+/* ── Primary button ─────────────────────────────────────────────────────────── */
+.btn-primary {
+  background: linear-gradient(135deg, #22d3ee, #0891b2);
+  color: white;
+  font-weight: 600;
+  padding: 0.75rem 2rem;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(34,211,238,0.35);
+}
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(34,211,238,0.45);
+}
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── Lab value bar ──────────────────────────────────────────────────────────── */
+.lab-bar-track {
+  position: relative;
+  height: 8px;
+  background: #e0f7fa;
+  border-radius: 9999px;
+  overflow: visible;
+}
+.lab-bar-normal {
+  position: absolute;
+  height: 100%;
+  background: rgba(34,211,238,0.25);
+  border-radius: 9999px;
+}
+.lab-bar-value {
+  position: absolute;
+  top: -3px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid white;
+  transform: translateX(-50%);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  transition: left 0.6s ease;
+}
