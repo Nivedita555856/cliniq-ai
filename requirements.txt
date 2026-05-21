@@ -15,11 +15,12 @@ groq>=0.8.0
 openai>=1.30.0
 
 # ── ML / Embeddings (for RAG) ─────────────────────────────────────────────────
+# Pinned for compatibility — newer transformers has nn import bug
 torch>=2.2.0
 torchvision>=0.17.0
-sentence-transformers>=2.7.0
-transformers>=4.40.0
-accelerate>=0.29.0
+sentence-transformers==2.7.0
+transformers==4.40.2
+accelerate==0.29.3
 
 # ── Vector DB ─────────────────────────────────────────────────────────────────
 pymilvus>=2.4.0
