@@ -14,17 +14,6 @@ python-dotenv>=1.0.1
 groq>=0.8.0
 openai>=1.30.0
 
-# ── ML / Embeddings (for RAG) ─────────────────────────────────────────────────
-# Pinned for compatibility
-torch>=2.2.0
-torchvision>=0.17.0
-sentence-transformers==3.2.1
-transformers==4.44.2
-accelerate==0.33.0
-
-# ── Vector DB ─────────────────────────────────────────────────────────────────
-pymilvus>=2.4.0
-
 # ── Image Processing ──────────────────────────────────────────────────────────
 Pillow>=10.3.0
 numpy>=1.26.0
@@ -40,5 +29,16 @@ tqdm>=4.66.0
 
 # ── Utilities ─────────────────────────────────────────────────────────────────
 requests>=2.31.0
-matplotlib>=3.8.0
 apscheduler>=3.10.0
+
+# ── Supabase ──────────────────────────────────────────────────────────────────
+supabase>=2.4.0
+
+# ── RAG (only needed when ZILLIZ_CLOUD_URI is set) ────────────────────────────
+# Uncomment these when deploying with Zilliz Cloud on a 2GB+ instance:
+# torch==2.2.2+cpu --index-url https://download.pytorch.org/whl/cpu
+# torchvision==0.17.2+cpu --index-url https://download.pytorch.org/whl/cpu
+# sentence-transformers==3.2.1
+# transformers==4.44.2
+# accelerate==0.33.0
+# pymilvus>=2.4.0

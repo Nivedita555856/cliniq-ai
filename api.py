@@ -17,12 +17,9 @@ load_dotenv()
 from parser import MedicalReportParser
 from image_analyzer import MedicalImageAnalyzer
 
-try:
-    from rag_system import MultimodalRAGSystem
-    RAG_MODULE_AVAILABLE = True
-except ImportError as _e:
-    print(f"[RAG] module import failed: {_e}")
-    RAG_MODULE_AVAILABLE = False
+# RAG system is imported lazily inside get_rag() to avoid loading
+# heavy ML models (BioBERT/ResNet50) when Zilliz Cloud is not configured.
+RAG_MODULE_AVAILABLE = True   # will be set False if import fails at runtime
 
 # ── Config ─────────────────────────────────────────────────────────────────────
 GROQ_API_KEY    = os.getenv("GROQ_API_KEY", "")
@@ -74,23 +71,33 @@ def get_parser():
     return _parser
 
 
-def get_rag() -> Optional["MultimodalRAGSystem"]:
+def get_rag():
     """
     Return the MultimodalRAGSystem singleton, or None if unavailable.
+    Only attempts to load heavy ML models when ZILLIZ_CLOUD_URI is configured.
     Failure is cached so we don't retry on every request.
-    Callers handle None by running Groq-only analysis.
     """
-    global _rag_system, _rag_error
+    global _rag_system, _rag_error, RAG_MODULE_AVAILABLE
     if _rag_system is not None:
         return _rag_system
     if _rag_error is not None:
         return None   # already failed — don't retry
-    if not RAG_MODULE_AVAILABLE:
-        _rag_error = "RAG module could not be imported"
+    # Skip entirely if Zilliz not configured — avoids loading BioBERT/ResNet50
+    zilliz_uri = os.getenv("ZILLIZ_CLOUD_URI", "")
+    milvus_host = os.getenv("MILVUS_HOST", "localhost")
+    if not zilliz_uri and milvus_host == "localhost":
+        _rag_error = "No vector DB configured — Groq-only mode"
+        print("[RAG] No Zilliz Cloud URI set — skipping RAG, running Groq-only mode.")
         return None
     try:
+        from rag_system import MultimodalRAGSystem
         _rag_system = MultimodalRAGSystem()
         return _rag_system
+    except ImportError as e:
+        RAG_MODULE_AVAILABLE = False
+        _rag_error = f"RAG packages not installed: {e}"
+        print(f"[RAG] ML packages not installed — Groq-only mode.")
+        return None
     except Exception as e:
         _rag_error = str(e)
         print(f"[RAG] Milvus unavailable — running in Groq-only mode. ({e})")
