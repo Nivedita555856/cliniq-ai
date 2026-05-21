@@ -785,28 +785,29 @@ async def get_current_outbreaks():
     if not client:
         raise HTTPException(status_code=503, detail="Groq API key not configured")
 
-    prompt = """You are a public health intelligence AI. Based on your most recent knowledge, 
-provide a structured JSON report of diseases currently spreading rapidly in different world regions.
+    prompt = """You are a public health intelligence AI focused on India. Based on your most recent knowledge,
+provide a structured JSON report of diseases currently spreading in India — covering different states and regions.
 
 Return ONLY valid JSON in this exact format (no markdown, no explanation, just JSON):
 {
   "outbreaks": [
     {
-      "region": "Region name",
-      "country_examples": "2-3 specific countries",
+      "region": "Indian state or region name",
+      "country_examples": "2-3 specific Indian states or cities",
       "disease": "Disease name",
       "trend": "rising" | "stable" | "declining",
       "severity": "critical" | "high" | "moderate",
-      "cases_context": "brief context about scale",
-      "patient_advice": "one specific action patients should take (under 15 words)"
+      "cases_context": "brief context about scale in India",
+      "patient_advice": "one specific action Indians should take (under 15 words)"
     }
   ],
-  "global_alerts": ["brief alert 1", "brief alert 2", "brief alert 3"],
+  "global_alerts": ["India-specific health alert 1", "India-specific health alert 2", "India-specific health alert 3"],
   "last_updated_note": "brief note about data currency"
 }
 
-Include 8 different outbreaks across different regions. Focus on real, current patterns.
-Be specific about regions. Make patient_advice actionable and short (under 15 words)."""
+Include 8 outbreaks across different Indian states and regions (e.g. Maharashtra, Kerala, Delhi, Tamil Nadu, West Bengal, Uttar Pradesh, Rajasthan, Karnataka).
+Focus on diseases common in India: Dengue, Malaria, Cholera, Typhoid, Tuberculosis, Chikungunya, Leptospirosis, Hand-foot-mouth disease, seasonal flu, etc.
+Be specific about Indian states. Make patient_advice practical for Indian patients."""
 
     try:
         resp = client.chat.completions.create(
@@ -837,21 +838,21 @@ Be specific about regions. Make patient_advice actionable and short (under 15 wo
             "success": True,
             "data": {
                 "outbreaks": [
-                    {"region": "Central Africa (DRC)", "country_examples": "DRC, Congo", "disease": "Mpox (Clade Ib)", "trend": "rising", "severity": "critical", "cases_context": "Major outbreak, WHO emergency declared", "patient_advice": "Avoid skin contact with infected; get vaccinated if eligible", "icon": ""},
-                    {"region": "South & Southeast Asia", "country_examples": "India, Bangladesh, Thailand", "disease": "Dengue Fever", "trend": "rising", "severity": "high", "cases_context": "Record cases in multiple countries", "patient_advice": "Use mosquito repellent and eliminate standing water", "icon": ""},
-                    {"region": "Sub-Saharan Africa", "country_examples": "Ethiopia, Somalia, Nigeria", "disease": "Cholera", "trend": "rising", "severity": "high", "cases_context": "Ongoing humanitarian crisis areas", "patient_advice": "Drink only boiled or bottled water", "icon": ""},
-                    {"region": "Global", "country_examples": "Northern hemisphere", "disease": "Influenza", "trend": "seasonal", "severity": "moderate", "cases_context": "Seasonal flu activity", "patient_advice": "Get annual flu vaccine before peak season", "icon": ""},
-                    {"region": "South Asia", "country_examples": "Pakistan, India", "disease": "Typhoid", "trend": "stable", "severity": "high", "cases_context": "Drug-resistant strains increasing", "patient_advice": "Vaccinate before travel; drink safe water only", "icon": "️"},
-                    {"region": "Europe & Americas", "country_examples": "Multiple countries", "disease": "Measles", "trend": "rising", "severity": "high", "cases_context": "Outbreaks due to vaccination gaps", "patient_advice": "Check MMR vaccination status for all family members", "icon": ""},
-                    {"region": "West Africa", "country_examples": "Ghana, Ivory Coast", "disease": "Malaria", "trend": "stable", "severity": "high", "cases_context": "Endemic with seasonal spikes", "patient_advice": "Use bed nets and antimalarial prophylaxis when travelling", "icon": ""},
-                    {"region": "Global", "country_examples": "All countries", "disease": "COVID-19", "trend": "stable", "severity": "moderate", "cases_context": "Ongoing circulation with new variants", "patient_advice": "Stay up to date with recommended boosters", "icon": ""},
+                    {"region": "Maharashtra", "country_examples": "Mumbai, Pune, Nashik", "disease": "Dengue Fever", "trend": "rising", "severity": "high", "cases_context": "Rising cases during monsoon season", "patient_advice": "Use mosquito repellent and remove standing water around home"},
+                    {"region": "Kerala", "country_examples": "Kozhikode, Malappuram, Thrissur", "disease": "Leptospirosis", "trend": "rising", "severity": "high", "cases_context": "Flooding increases exposure risk", "patient_advice": "Avoid wading in floodwater; wear protective footwear"},
+                    {"region": "Uttar Pradesh", "country_examples": "Lucknow, Varanasi, Agra", "disease": "Typhoid", "trend": "stable", "severity": "high", "cases_context": "Drug-resistant strains reported", "patient_advice": "Drink only boiled or bottled water; get vaccinated"},
+                    {"region": "West Bengal", "country_examples": "Kolkata, Howrah, Siliguri", "disease": "Cholera", "trend": "rising", "severity": "high", "cases_context": "Post-flood contamination risk", "patient_advice": "Drink safe water only; practice strict hand hygiene"},
+                    {"region": "Rajasthan", "country_examples": "Jaipur, Jodhpur, Udaipur", "disease": "Malaria", "trend": "stable", "severity": "moderate", "cases_context": "Endemic with seasonal monsoon spikes", "patient_advice": "Sleep under mosquito nets; take antimalarials if advised"},
+                    {"region": "Tamil Nadu", "country_examples": "Chennai, Coimbatore, Madurai", "disease": "Chikungunya", "trend": "rising", "severity": "moderate", "cases_context": "Post-monsoon surge in urban areas", "patient_advice": "Use mosquito repellent; wear full-sleeve clothing"},
+                    {"region": "Delhi NCR", "country_examples": "Delhi, Gurugram, Noida", "disease": "Influenza", "trend": "seasonal", "severity": "moderate", "cases_context": "Winter respiratory season", "patient_advice": "Get annual flu vaccine; wear mask in crowded places"},
+                    {"region": "Karnataka", "country_examples": "Bengaluru, Mysuru, Mangaluru", "disease": "Tuberculosis", "trend": "stable", "severity": "high", "cases_context": "Urban TB burden remains high", "patient_advice": "Complete full TB treatment course; get tested if symptomatic"},
                 ],
                 "global_alerts": [
-                    "Mpox Clade Ib: WHO public health emergency — Central Africa",
-                    "Dengue at record levels in Asia and Americas in 2024",
-                    "Measles resurgence globally due to vaccination gaps"
+                    "Dengue cases rising across Maharashtra and southern states this monsoon season",
+                    "Leptospirosis risk high in flood-affected areas of Kerala and coastal regions",
+                    "Drug-resistant typhoid strains detected in several north Indian states"
                 ],
-                "last_updated_note": "Static fallback data — Groq AI analysis temporarily unavailable"
+                "last_updated_note": "India health intelligence — fallback data"
             },
             "powered_by": "Static fallback",
             "error":     str(e),
