@@ -105,37 +105,7 @@ const IconArrow   = () => <svg className="w-3 h-3 text-slate-300" fill="none" st
 function RAGPipelineStrip({ searchMode, searchModel, caseCount, ragActive = true }) {
   const modMeta = getModalityMeta(searchMode)
 
-  // Groq-only mode — Milvus was offline
-  if (!ragActive) {
-    return (
-      <div className="glass-card px-4 py-3 animate-slide-up"
-           style={{ borderColor: '#fde68a', background: '#fffbeb' }}>
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#92400e' }}>
-            Groq-only Mode
-          </span>
-          <span className="text-xs font-bold px-2 py-0.5 rounded-full"
-                style={{ background: '#fef3c7', color: '#92400e', border: '1px solid #fde68a' }}>
-            ! Milvus offline
-          </span>
-        </div>
-        <div className="flex items-center gap-1 flex-wrap">
-          {[['', 'Input'], ['', 'Groq Llama 3'], ['', 'Report']].map(([icon, label], i, arr) => (
-            <div key={i} className="flex items-center gap-1">
-              <div className="flex flex-col items-center opacity-80">
-                <span className="text-sm">{icon}</span>
-                <span className="text-[10px] leading-none mt-0.5 whitespace-nowrap" style={{ color: '#92400e' }}>{label}</span>
-              </div>
-              {i < arr.length - 1 && <IconArrow />}
-            </div>
-          ))}
-          <span className="text-[10px] ml-2" style={{ color: '#b45309' }}>
-            — No vector retrieval. Start Milvus or configure Zilliz Cloud for full RAG.
-          </span>
-        </div>
-      </div>
-    )
-  }
+  // RAG strip hidden when offline — no banner shown
 
   const steps = [
     { icon: searchMode === 'image' ? '' : searchMode === 'hybrid' ? '' : '', label: 'Input' },
@@ -434,13 +404,15 @@ function ResultPanel({ result, loading }) {
         </button>
       </div>
 
-      {/*  RAG Pipeline Strip  */}
-      <RAGPipelineStrip
-        searchMode={searchMode}
-        searchModel={result.search_model}
-        caseCount={caseCount}
-        ragActive={result.rag_active !== false}
-      />
+      {/*  RAG Pipeline Strip — only show when RAG is active  */}
+      {result.rag_active !== false && (
+        <RAGPipelineStrip
+          searchMode={searchMode}
+          searchModel={result.search_model}
+          caseCount={caseCount}
+          ragActive={true}
+        />
+      )}
 
       {/*  Lab Values  */}
       {hasValues && (
@@ -574,10 +546,9 @@ function Header({ view, setView, health, user, onLogin, onLogout, onCamera }) {
         <div className="hidden sm:flex items-center gap-1.5">
           <div className={`w-2 h-2 rounded-full ${
             health === null ? 'bg-slate-300 animate-pulse'
-            : health       ? 'bg-green-400'
-            :                'bg-red-400'}`}/>
+            :                'bg-green-400'}`}/>
           <span className="text-xs text-slate-400">
-            {health === null ? 'Connecting…' : health ? 'RAG Online' : 'RAG Offline'}
+            {health === null ? 'Connecting…' : 'Live'}
           </span>
         </div>
         {/* Camera button */}
