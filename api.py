@@ -798,8 +798,7 @@ Return ONLY valid JSON in this exact format (no markdown, no explanation, just J
       "trend": "rising" | "stable" | "declining",
       "severity": "critical" | "high" | "moderate",
       "cases_context": "brief context about scale",
-      "patient_advice": "one specific action patients should take",
-      "icon": "single emoji representing the disease"
+      "patient_advice": "one specific action patients should take (under 15 words)"
     }
   ],
   "global_alerts": ["brief alert 1", "brief alert 2", "brief alert 3"],
@@ -1022,25 +1021,45 @@ async def analyze_symptoms(req: SymptomRequest):
     gender_info = f"Patient gender: {req.gender}" if req.gender else ""
     profile     = " | ".join(filter(None, [age_info, gender_info]))
 
-    prompt = (
-        "You are a medical triage AI. A patient has described their symptoms.\n"
-        + (f"Patient profile: {profile}\n" if profile else "")
-        + f"Symptoms: {req.symptoms}\n\n"
-        "Return ONLY valid JSON (no markdown):\n"
-        "{\n"
-        '  "urgency": <1-10 integer>,\n'
-        '  "urgency_label": "<Emergency|Urgent|See Doctor Soon|Monitor|Normal>",\n'
-        '  "summary": "<1 sentence summary of the symptom presentation>",\n'
-        '  "possible_conditions": ["<condition 1>", "<condition 2>", "<condition 3>"],\n'
-        '  "recommended_action": "<clear next step in plain English, max 20 words>",\n'
-        '  "timeframe": "<e.g. Call 911 now | Within 2 hours | Within 24 hours | This week | Monitor at home>",\n'
-        '  "red_flags": ["<symptom that would make this more serious>"],\n'
-        '  "self_care": "<brief home care tip if applicable, or empty string>",\n'
-        '  "time_sensitive": <true|false>\n'
-        "}\n\n"
-        "Urgency scale: 1-2=normal, 3-4=monitor, 5-6=see doctor soon, 7-8=urgent care, 9-10=emergency.\n"
-        "Be conservative — when in doubt, score higher."
-    )
+    # Build rich patient context
+    context_parts = []
+    if req.age:
+        age = int(req.age)
+        if age < 5:       context_parts.append(f"Patient: infant/toddler aged {age}")
+        elif age < 18:    context_parts.append(f"Patient: child aged {age}")
+        elif age < 60:    context_parts.append(f"Patient: adult aged {age}")
+        else:             context_parts.append(f"Patient: elderly aged {age} (higher risk for complications)")
+    if req.gender:
+        context_parts.append(f"Biological sex: {req.gender}")
+    patient_ctx = ". ".join(context_parts) + "." if context_parts else ""
+
+    prompt = f"""You are an experienced medical triage AI assistant. Analyse the symptoms below carefully.
+{("Patient context: " + patient_ctx) if patient_ctx else ""}
+Symptoms reported: {req.symptoms}
+
+Consider age and gender when relevant (e.g. chest pain in elderly = higher urgency; abdominal pain in women of reproductive age may suggest gynaecological causes; fever in infants is more serious).
+
+Return ONLY valid JSON — no markdown, no explanation:
+{{
+  "urgency": <integer 1-10>,
+  "urgency_label": "<EMERGENCY | URGENT CARE | SEE DOCTOR SOON | MONITOR | NORMAL>",
+  "summary": "<2-3 sentence clinical summary of the presentation>",
+  "possible_conditions": ["<most likely condition>", "<second>", "<third>"],
+  "recommended_action": "<specific, actionable next step>",
+  "timeframe": "<Call 999/911 now | Within 1 hour | Within 24 hours | Within a week | Monitor at home>",
+  "red_flags": ["<warning sign 1>", "<warning sign 2>"],
+  "self_care": "<practical home care advice if safe to do so, otherwise empty string>",
+  "time_sensitive": <true if urgent, false if not>
+}}
+
+Urgency scale:
+9-10 = EMERGENCY (life-threatening, call emergency services)
+7-8  = URGENT CARE (needs same-day medical attention)
+5-6  = SEE DOCTOR SOON (within 24 hours)
+3-4  = MONITOR (watch symptoms, see GP if worsens)
+1-2  = NORMAL (mild, can manage at home)
+
+Always err on the side of caution. Be specific to the patient\'s age and sex."""
 
     try:
         resp = client.chat.completions.create(
@@ -1150,3 +1169,30 @@ if __name__ == "__main__":
     import uvicorn
     port = int(os.getenv("PORT", "8000"))
     uvicorn.run("api:app", host="0.0.0.0", port=port, reload=False, log_level="info")
+
+
+# ── Groq Whisper transcription ─────────────────────────────────────────────────
+@app.post("/transcribe")
+async def transcribe_audio(file: UploadFile = File(...)):
+    """
+    Transcribe audio using Groq Whisper large-v3-turbo.
+    Accepts webm/mp4/wav/ogg audio from the browser MediaRecorder API.
+    """
+    if not GROQ_API_KEY:
+        raise HTTPException(status_code=500, detail="GROQ_API_KEY not configured")
+    try:
+        from groq import Groq as GroqClient
+        audio_bytes = await file.read()
+        filename    = file.filename or "audio.webm"
+        client      = GroqClient(api_key=GROQ_API_KEY)
+        transcription = client.audio.transcriptions.create(
+            file=(filename, audio_bytes, file.content_type or "audio/webm"),
+            model="whisper-large-v3-turbo",
+            response_format="text",
+            language="en",
+        )
+        # Groq returns plain text when response_format="text"
+        text = transcription if isinstance(transcription, str) else getattr(transcription, "text", str(transcription))
+        return {"text": text.strip()}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Transcription failed: {e}")

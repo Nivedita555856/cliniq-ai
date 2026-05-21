@@ -6,7 +6,6 @@ DISEASES = [
     {
         "id": "covid19",
         "name": "COVID-19",
-        "icon": "",
         "category": "viral",
         "color": "#0891b2",
         "severity": "high",
@@ -23,7 +22,6 @@ DISEASES = [
     {
         "id": "influenza",
         "name": "Influenza (Flu)",
-        "icon": "",
         "category": "viral",
         "color": "#0891b2",
         "severity": "moderate",
@@ -40,7 +38,6 @@ DISEASES = [
     {
         "id": "dengue",
         "name": "Dengue Fever",
-        "icon": "",
         "category": "viral",
         "color": "#d97706",
         "severity": "high",
@@ -57,7 +54,6 @@ DISEASES = [
     {
         "id": "malaria",
         "name": "Malaria",
-        "icon": "",
         "category": "parasitic",
         "color": "#16a34a",
         "severity": "high",
@@ -74,7 +70,6 @@ DISEASES = [
     {
         "id": "tuberculosis",
         "name": "Tuberculosis (TB)",
-        "icon": "",
         "category": "bacterial",
         "color": "#dc2626",
         "severity": "high",
@@ -91,7 +86,6 @@ DISEASES = [
     {
         "id": "pneumonia",
         "name": "Pneumonia",
-        "icon": "",
         "category": "mixed",
         "color": "#7c3aed",
         "severity": "high",
@@ -108,7 +102,6 @@ DISEASES = [
     {
         "id": "diabetes_t2",
         "name": "Type 2 Diabetes",
-        "icon": "",
         "category": "chronic",
         "color": "#9333ea",
         "severity": "moderate",
@@ -125,7 +118,6 @@ DISEASES = [
     {
         "id": "hypertension",
         "name": "Hypertension",
-        "icon": "️",
         "category": "chronic",
         "color": "#dc2626",
         "severity": "moderate",
@@ -142,7 +134,6 @@ DISEASES = [
     {
         "id": "heart_disease",
         "name": "Coronary Heart Disease",
-        "icon": "",
         "category": "chronic",
         "color": "#dc2626",
         "severity": "critical",
@@ -159,7 +150,6 @@ DISEASES = [
     {
         "id": "stroke",
         "name": "Stroke",
-        "icon": "",
         "category": "chronic",
         "color": "#7c3aed",
         "severity": "critical",
@@ -176,7 +166,6 @@ DISEASES = [
     {
         "id": "asthma",
         "name": "Asthma",
-        "icon": "",
         "category": "chronic",
         "color": "#0891b2",
         "severity": "moderate",
@@ -193,7 +182,6 @@ DISEASES = [
     {
         "id": "copd",
         "name": "COPD",
-        "icon": "️",
         "category": "chronic",
         "color": "#d97706",
         "severity": "high",
@@ -210,7 +198,6 @@ DISEASES = [
     {
         "id": "cholera",
         "name": "Cholera",
-        "icon": "",
         "category": "bacterial",
         "color": "#0891b2",
         "severity": "critical",
@@ -227,7 +214,6 @@ DISEASES = [
     {
         "id": "typhoid",
         "name": "Typhoid Fever",
-        "icon": "️",
         "category": "bacterial",
         "color": "#dc2626",
         "severity": "high",
@@ -244,7 +230,6 @@ DISEASES = [
     {
         "id": "measles",
         "name": "Measles",
-        "icon": "",
         "category": "viral",
         "color": "#dc2626",
         "severity": "high",
@@ -261,7 +246,6 @@ DISEASES = [
     {
         "id": "hepatitis_b",
         "name": "Hepatitis B",
-        "icon": "",
         "category": "viral",
         "color": "#d97706",
         "severity": "high",
@@ -278,7 +262,6 @@ DISEASES = [
     {
         "id": "hiv_aids",
         "name": "HIV / AIDS",
-        "icon": "",
         "category": "viral",
         "color": "#dc2626",
         "severity": "critical",
@@ -295,7 +278,6 @@ DISEASES = [
     {
         "id": "chickenpox",
         "name": "Chickenpox",
-        "icon": "",
         "category": "viral",
         "color": "#0891b2",
         "severity": "low",
@@ -312,7 +294,6 @@ DISEASES = [
     {
         "id": "mpox",
         "name": "Mpox (Monkeypox)",
-        "icon": "",
         "category": "viral",
         "color": "#d97706",
         "severity": "high",
@@ -329,7 +310,6 @@ DISEASES = [
     {
         "id": "rotavirus",
         "name": "Rotavirus / Diarrhoeal Disease",
-        "icon": "",
         "category": "viral",
         "color": "#16a34a",
         "severity": "moderate",
