@@ -191,8 +191,8 @@ function RiskGauge({ risk = '' }) {
             style={{ transition:'stroke-dasharray 1s ease, stroke 0.5s ease' }}/>
       {(() => {
         const angle = Math.PI * (1 - pct)
-        const nx = cx + 36 * Math.cos(angle - Math.PI)
-        const ny = cy - 36 * Math.sin(angle - Math.PI)
+        const nx = cx + 36 * Math.cos(angle)
+        const ny = cy - 36 * Math.sin(angle)
         return <line x1={cx} y1={cy} x2={nx} y2={ny} stroke={color} strokeWidth="3" strokeLinecap="round"
                      style={{ transition:'all 0.8s ease' }}/>
       })()}
