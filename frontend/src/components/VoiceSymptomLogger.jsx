@@ -235,7 +235,7 @@ export default function VoiceSymptomLogger() {
               <div className="text-center">
                 <h2 className="text-base font-bold text-slate-800">Voice Symptom Logger</h2>
                 <p className="text-xs text-slate-400 mt-0.5">
-                  {transcribing ? 'Transcribing with Groq Whisper…' : 'Tap the mic and describe how you feel'}
+                  {transcribing ? 'Tap the mic and describe how you feel' : 'Tap the mic and describe how you feel'}
                 </p>
               </div>
 
@@ -247,7 +247,7 @@ export default function VoiceSymptomLogger() {
                 {isRecording
                   ? 'Recording… tap again to stop'
                   : transcribing
-                  ? 'Processing with Groq Whisper…'
+                  ? 'Processing your voice…'
                   : 'Tap to start recording'}
               </p>
             </div>
@@ -288,7 +288,7 @@ export default function VoiceSymptomLogger() {
                     className="w-full text-sm border border-slate-200 rounded-lg px-2.5 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-300"/>
                 </div>
                 <div>
-                  <label className="text-xs text-slate-500 block mb-1">Biological sex</label>
+                  <label className="text-xs text-slate-500 block mb-1">Gender</label>
                   <select value={gender} onChange={e => setGender(e.target.value)}
                     className="w-full text-sm border border-slate-200 rounded-lg px-2.5 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-300 bg-white">
                     <option value="">Not specified</option>
@@ -330,7 +330,7 @@ export default function VoiceSymptomLogger() {
                   <div className="absolute inset-0 rounded-full border-4 border-cyan-100"/>
                   <div className="absolute inset-0 rounded-full border-4 border-cyan-500 border-t-transparent animate-spin"/>
                 </div>
-                <p className="text-sm font-medium text-slate-600">Groq AI is triaging your symptoms…</p>
+                <p className="text-sm font-medium text-slate-600">AI is triaging your symptoms…</p>
               </div>
             )}
 
